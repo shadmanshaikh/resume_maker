@@ -1,0 +1,56 @@
+{% extends "home.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Create Project</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="projectName">Project Name</label>
+      <input type="text" class="form-control" id="projectName" name="project_name" required>
+    </div>
+    <div class="form-group">
+        <label for="technologyUsed">Technology Used</label>
+        <select class="form-control" id="technologyUsed" name="technology_used[]" multiple required>
+          {% for technology in tech %}
+          <option value="{{ technology }}">{{ technology }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+    <div class="form-group">
+      <label for="projectDescription">Project Description</label>
+      <textarea class="form-control" id="projectDescription" name="description" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="roleResponsibilities">Role and Responsibilities</label>
+      <textarea class="form-control" id="roleResponsibilities" name="role_responsibilities" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start Date</label>
+      <input type="date" class="form-control" id="startDate" name="start_date" required>
+    </div>
+    <div class="form-group">
+      <label for="endDate">End Date</label>
+      <input type="date" class="form-control" id="endDate" name="end_date" required>
+    </div>
+    <div class="form-group">
+      <label>Status:</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="is_active" id="active" value="1" checked>
+        <label class="form-check-label" for="active">
+          Active
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="is_active" id="closed" value="0">
+        <label class="form-check-label" for="closed">
+          Closed
+        </label>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Project</button>
+    <a href="{% url 'project_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

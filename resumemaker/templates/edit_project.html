@@ -1,0 +1,29 @@
+{% extends 'home.html' %}
+
+{% block content %}
+  <h2>Edit Project</h2>
+  <style>
+  .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  .flex-row > label {
+      flex-basis: calc(33.33% - 10px); /* 3 items per row with 10px gap between them */
+      margin-bottom: 10px;
+  }  
+  </style>
+  <a style="color:red ;">Please enter date in this format : "2022-06-05"</a>
+  <form method="post" class="form-horizontal">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Update Project</button>
+        <a href="{% url 'project_list' %}" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

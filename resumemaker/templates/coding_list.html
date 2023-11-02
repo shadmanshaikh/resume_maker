@@ -1,0 +1,33 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <h1>Coding Skills</h1>
+    <a href="{% url 'create_coding_skill' %}" class="btn btn-primary float-right">Create New</a>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for coding_skill in coding_skills %}
+        <tr>
+          <td>{{ coding_skill.id }}</td>
+          <td>{{ coding_skill.name }}</td>
+          <td>
+            <a href="{% url 'edit_coding_skill' coding_skill.id %}" class="btn btn-sm btn-info">Edit</a>
+            <a href="{% url 'delete_coding_skill' coding_skill.id %}" class="btn btn-sm btn-danger">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<style>
+.flex-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.flex-columns > label {
+    flex-basis: calc(50% - 10px); /* 2 items per row with 10px gap between them */
+    margin-bottom: 10px;
+}
+
+</style>
+<h1>Create Project</h1>
+<a style="color:red ;">Please enter date in this format : "2022-06-05"</a>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create Project</button>
+        <a href="{% url 'project_list' %}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}
+

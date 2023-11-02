@@ -1,0 +1,54 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row mt-5">
+    <div class="col">
+      <h1>Employee List</h1>
+    </div>
+    <div class="col text-end">
+      <a href="{% url 'create' %}" class="btn btn-primary">Create Employee</a>
+    </div>
+  </div>
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Designation</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Linkedin</th>
+        <th>Tools</th>
+        <th>Coding</th>
+        <th>Action</th>
+        <th>Resume</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in employees %}
+      <tr>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.designation }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.phone }}</td>
+        <td>{{ employee.linkedin }}</td>
+        <td>{{ employee.tools.all|join:', ' }}</td>
+        <td>{{ employee.coding_skills.all|join:', ' }}</td>
+        <td>
+          <a href="{% url 'edit' employee.id %}" class="btn btn-sm btn-primary mb-2">Edit</a>
+          <form method="POST" action="{% url 'delete' employee.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger mb-2">Delete</button>
+          </form>
+          <a href="{% url 'map_project' employee.id  %}" class="btn btn-sm btn-success ">Map</a>
+        </td>
+        <td>
+          <a href="{% url 'view_resume' employee.id  %}" class="btn btn-sm btn-primary">View</a>
+         
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+      </table>
+    </div>
+    {% endblock %}

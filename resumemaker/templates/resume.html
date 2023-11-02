@@ -1,0 +1,182 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<style>
+	.name {
+		padding-top: 1cm;
+	}
+	.designation{
+		padding-top: -0.25cm;
+	}
+	.heading{
+		padding-top: 0.5cm;
+		font-size: large;
+		font-weight: bold;
+	}
+	.heading1{
+		
+		font-size: large;
+		font-weight: bold;
+	}
+	
+</style>
+<div id="pdf-content" style="color:black ;">
+	
+	<div class="logo"  style="float:right ;">
+		<img src="{% static 'image/jumpwhere.png' %}" alt="JumpWhere">
+	</div>
+    <p class="name" style="padding-top: 1cm;display:block;">Name: <b>{{ ename }}</b></p>
+    <p class="designation" style="padding-top: -0.25cm;">Designation: <b>{{ edesignation }}</b></p>
+	<p class="email" style="padding-top: -0.25cm;">Email: <b>{{ eemail }}</b></p>
+	<p class="phone" style="padding-top: -0.25cm;">Phone: <b>{{ ephone }}</b></p>
+	<p class="linkedin" style="padding-top: -0.25cm;">LinkedIn: <b>{{ elinkedin }}</b></p>
+	<hr>
+    
+	<p class="heading" style="padding-top: 0.5cm;font-size: large;font-weight: bold;">Professional Summary:</p>
+	<ul>
+		{% for summary in epsummery %}
+        {% if summary %}
+            <li>{{ summary }}</li>
+        {% endif %}
+   		{% endfor %}
+	</ul>
+
+	
+	<p class="heading1" style="padding-top: 0.5cm;font-size: large;font-weight: bold;">Technical Skill Set:</p>
+	<ul>
+		<li>Coding: {% for skill in eskill %}{{ skill }}, {% endfor %}</li>
+		<li>Tools: {% for tool in etools %}{{ tool }}, {% endfor %}</li>
+	</ul>
+
+	
+
+	<p class="heading1" style="padding-top: 0.5cm;font-size: large;font-weight: bold;">Professional Projects:</p>
+
+
+	{% for project in eproject %}
+	<p style="font-size:large;font-weight:bold">Project {{ forloop.counter }}: {{ project.project_name }}</p>
+	<ul>
+		<li>Technology used: {% for tech in project.technology_used %}{{ tech }}, {% endfor %}</li>
+		<li>Description: {{ project.description }}</li>
+		<li>Role and Responsibilities:</li>
+		<ul>
+			{% for responsibility in project.role_responsibilities %}
+				<li>{{ responsibility }}</li>
+			{% endfor %}
+		</ul>
+	</ul>
+{% endfor %}
+
+	
+</div>
+<button  class="btn btn-sm btn-primary"onclick="downloadPDF()">Download PDF</button>
+<button class="btn btn-sm btn-secondary " onclick="Export2Wor('pdf-content', filename = '{{ ename }}')">Download WORD</button>
+
+<script>
+	function downloadPDF() {
+		const content = document.getElementById('pdf-content');
+		
+		html2pdf().set({
+		  margin: 1,
+		  filename: '{{ ename }}.pdf',
+		  image: { type: 'jpeg', quality: 0.98 },
+		  html2canvas: { scale: 2 },
+		  jsPDF: { unit: 'in', format: 'A4', orientation: 'portrait' }
+		}).from(content).save();
+	  }
+	  
+document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+
+
+function Export2Word(element, filename = ''){
+    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+    var postHtml = "</body></html>";
+    var html = preHtml+document.getElementById(element).innerHTML+postHtml;
+
+    var blob = new Blob(['\ufeff', html], {
+        type: 'application/msword'
+    });
+    
+    // Specify link url
+    var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+    
+    // Specify file name
+    filename = filename?filename+'.doc':'document.doc';
+    
+    // Create download link element
+    var downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob ){
+        navigator.msSaveOrOpenBlob(blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = url;
+        
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+    
+    document.body.removeChild(downloadLink);
+}
+
+function Export2Wor(element, filename = '') {
+	var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+	var postHtml = "</body></html>";
+	var html = preHtml + document.getElementById(element).innerHTML + postHtml;
+	
+	// Convert image to base64 string
+	var img = document.querySelector('#pdf-content img');
+	var canvas = document.createElement('canvas');
+	//canvas.width = img.naturalWidth;
+	canvas.width = 800;
+	canvas.height = img.naturalHeight;
+	canvas.getContext('2d').drawImage(img, 600, 0);
+	//canvas.getContext('2d').drawImage(img, canvas.width - img.naturalWidth, 0);
+	var base64Img = canvas.toDataURL('image/png');
+  
+	// Replace image src with base64 string
+	html = html.replace(/src="[^"]*"/g, 'src="' + base64Img + '"');
+  
+	var blob = new Blob(['\ufeff', html], {
+	  type: 'application/msword'
+	});
+  
+	// Specify link url
+	var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+  
+	// Specify file name
+	filename = filename ? filename + '.doc' : 'document.doc';
+  
+	// Create download link element
+	var downloadLink = document.createElement("a");
+  
+	document.body.appendChild(downloadLink);
+  
+	if (navigator.msSaveOrOpenBlob) {
+	  navigator.msSaveOrOpenBlob(blob, filename);
+	} else {
+	  // Create a link to the file
+	  downloadLink.href = url;
+  
+	  // Setting the file name
+	  downloadLink.download = filename;
+  
+	  //triggering the function
+	  downloadLink.click();
+	}
+  
+	document.body.removeChild(downloadLink);
+  }
+  
+
+
+</script>
+{% endblock %}
+

@@ -1,0 +1,166 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<button onclick="downloadPDF()">Download PDF</button>
+<button id="download-word">Download WORD</button>
+
+<script>
+	function downloadPDF() {
+		const content = document.getElementById('pdf-content');
+		
+		html2pdf().set({
+		  margin: 1,
+		  filename: '{{ ename }}.pdf',
+		  image: { type: 'jpeg', quality: 0.98 },
+		  html2canvas: { scale: 2 },
+		  jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+		}).from(content).save();
+	  }
+	  
+document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+</script>
+{% endblock %}
+
+
+
+###########################################################################################################################
+const puppeteer = require('puppeteer');
+
+async function generatePDF() {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('http://example.com', {waitUntil: 'networkidle0'});
+  await page.pdf({path: 'example.pdf', format: 'A4'});
+  await browser.close();
+}
+
+generatePDF();
+
+
+#############################################################################################################################
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<button id="download-pdf" onclick="downloadPDF()">Download PDF</button>
+<button id="download-word">Download WORD</button>
+
+<script>
+	function downloadPDF() {
+		var element = document.getElementById('pdf-content');
+		var opt = {
+		  margin: [15, 15, 15, 15],
+		  filename: '{{ ename }}.pdf',
+		  image: { type: 'jpeg', quality: 0.98 },
+		  html2canvas: { scale: 2 },
+		  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+		  header: {
+			height: '11.5mm',
+			image: './static/image/jumpwhere.png',
+			width: '50.9mm',
+			margin: { top: '7.5mm', right: '10mm' }
+		  }
+		};
+	  
+		html2pdf().set(opt).from(element).save();
+	  }
+	  
+	  document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+	  
+	</script>
+	
+##########################################################################################################
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+<style>
+	.name {
+		padding-top: 1cm;
+	}
+	.designation{
+		padding-top: -0.25cm;
+	}
+	.heading{
+		padding-top: 0.5cm;
+		font-size: large;
+		font-weight: bold;
+	}
+	.heading1{
+		
+		font-size: large;
+		font-weight: bold;
+	}
+	
+</style>
+<div id="pdf-content" style="color:black ;">
+	<div class="logo">
+		<img src="{% static 'image/jumpwhere.png' %}" alt="JumpWhere">
+	</div>
+    <p class="name">Name: <b>{{ ename }}</b></p>
+    <p class="designation">Designation: <b>{{ edesignation }}</b></p>
+	<hr>
+    
+	<p class="heading">Professional Summary:</p>
+	<ul>
+		{% for summary in epsummery %}
+        {% if summary %}
+            <li>{{ summary }}</li>
+        {% endif %}
+   		{% endfor %}
+	</ul>
+
+	
+	<p class="heading1">Technical Skill Set:</p>
+	<ul>
+		<li>Coding: {% for skill in eskill %}{{ skill }}, {% endfor %}</li>
+		<li>Tools: {% for tool in etools %}{{ tool }}, {% endfor %}</li>
+	</ul>
+
+	
+
+	<p class="heading1">Professional Projects:</p>
+	<h6>Project 1: Time tag</h6>
+	<ul>
+		<li>Technology used: Laravel, Mysql, Javascript, Jquery, Ajax, Html, Css & Bootstrap.</li>
+		<li>Description: <p>Time tag is a website used to fill employee timesheets. Also, the admin has an option to check all employees' timesheets, filtering employees timesheets based on filters and exporting timesheets.</li>
+		<li>Role and Responsibilities:</li>
+		<ul>
+			<li>Python developer.</li>
+			<li>Developed different panels based on user role.</li>
+			<li>Timesheet filtration based on date.</li>
+			<li>Export timesheet.</li>
+			<li>CRUD operations.</li>
+			<li>UI implementation.</li>
+		</ul>
+	</ul>
+</div>
+<button id="download-pdf">Download PDF</button>
+<button id="download-word">Download WORD</button>
+
+<script>
+function downloadPDF() {
+   var doc = new jsPDF({
+    orientation: 'p',
+    unit: 'mm',
+    format: 'a4'
+  });
+  
+  var imgHeight = 11.5; // in mm
+  var imgWidth = 50.9; // in mm
+  var imgTopMargin = 7.5; // in mm
+  var imgRightMargin = 10; // in mm
+  
+  var content = document.getElementById('pdf-content');
+  
+  doc.fromHTML(content, 15, 15, {
+    'width': 170
+  });
+  
+  var base64Img = 'data:image/png;base64,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';
+doc.addImage(base64Img, 'PNG', doc.internal.pageSize.width - imgWidth - imgRightMargin, imgTopMargin, imgWidth, imgHeight);
+
+   doc.save('{{ ename }}.pdf');
+}
+
+document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+</script>
+{% endblock %}

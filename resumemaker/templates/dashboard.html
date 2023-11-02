@@ -1,0 +1,41 @@
+{% extends 'home.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+            <div class="card bg-danger text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">Employees</h5>
+                    <p class="card-text display-4 font-weight-bold">{{ employee_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">Projects</h5>
+                    <p class="card-text display-4 font-weight-bold">{{ project_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-primary text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">Coding Skills</h5>
+                    <p class="card-text display-4 font-weight-bold">{{ coding_skill_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">Tools</h5>
+                    <p class="card-text display-4 font-weight-bold">{{ tool_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
